@@ -1,0 +1,6 @@
+1. Where you did the same calculations with NumPy and Pandas, which did you find easier to work with? Which code do you think is easier to read?
+
+When I apply date_to_month function to every row of the data['date'], The function is applied similarly from numpy to pandas. I find numpy easier to work with and pandas is much more easier to use. Pandas has some special features that allows to manipulate the data in more of advanced way.
+
+2. What were the running times of the two pivot_months_* functions? How can you explain the difference?
+In pivot_months_pandas, the running result is 10 loops, best of 3: 23.9 ms per loop. In pivot_months_loops, the running result is 1 loop, best of 3: 773 ms per loop. Using pandas function is faster because pandas is implemented in c while the loops in pivot_months_loops are done in python. 

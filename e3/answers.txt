@@ -1,0 +1,7 @@
+1. When smoothing the CPU temperature, do you think you got a better result with LOESS or Kalman smoothing? What differences did you notice?
+
+Kalman smoothing produces a smoother graph on ambient noise levels but captures data spikes better than loess. All of this is dependent on the fact we have some prior knowledge on sensor noise and some guess on the temperature state.
+
+2. In the GPX files, you might have also noticed other data about the observations: time stamp, course (heading in degrees from north, 0–360), speed (in m/s). How could those have been used to make a better prediction about the “next” latitude and longitude? [Aside: I tried, and it didn't help much. I think the values are calculated from the latitude/longitude by the app: they don't really add much new information.]
+
+speed for example, could be used to predict the next location. So we can have better transition_matrices than just the identity matrix. If we have a better predictor model, we can further improve the prediction.

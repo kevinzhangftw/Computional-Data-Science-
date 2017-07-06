@@ -1,0 +1,7 @@
+1. Looking at your dog-rates.ipynb, do you think the residual are close-enough to being normal to look at the OLS p-value? Can you reasonably conclude that the ratings are increasing?
+
+The residuals are close enough to normal to look at the OLS p-value. Because the model coefficient is so low, it is difficult to conclude that the ratings are increasing.
+
+2. Do you think that the new “better” prediction is letting the Kalman filter do a better job capturing the true signal in the noise?
+
+Yes. the Kalman filter now has more information to predict where the next temperture will be. It is better at filtering noise and capture true data.

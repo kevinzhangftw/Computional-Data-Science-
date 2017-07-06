@@ -1,0 +1,16 @@
+1. Which of the four transforms suggested got you the closest to satisfying the assumptions of a T-test?
+
+np.sqrt
+
+2. I gave imprecise English translations of what the by-week test, and the Mann-Whitney test were actually testing. Do the same for the original T-test, and for the transformed data T-test. That is, describe what the conclusion would be if you could reject the null hypothesis in those tests.
+
+if the null hypthoesis is rejected, it simply means we do not have evidence to conclude that weekend comment count and weekday comment count is the same. The ttest requires data to be normally distributed and have equal variances. If these two conditions suffices with large enough p values, then we are more confident to reject the null hypthoesis. However, the utest has no such conditions so if pvalue is less then 0.05, we can reject null hypothesis. 
+
+3. Of the four approaches, which do you think actually does a better job of getting an answer for the original question: “are there a different number of Reddit comments posted on weekdays than on weekends?” Briefly explain why. (It's not clear to me that there is a single correct answer to this question.)
+
+The use of central limit theorm should give us a more accurate result because large enough samples tends to be normally distributed. In this case, I am not sure central limit theorem would gurantee equal variance as well. But it appears to be the case here and conditions are all satisfied this way.
+
+
+When are more Reddit comments posted in /r/canada, on average weekdays or weekends?
+
+weekends

@@ -1,0 +1,7 @@
+1. Which model did the best for the colour-prediction task? Can you give a theory about why?
+
+knn classifier seems to perform the best with 5 neighbors. The theory is most likely because the color points seems to be clustered together, therefore nearest neighbor seems to perform better.
+
+2. Have a look at the cities in your test data where the weather model makes the wrong prediction. Do you feel like the model is making reasonable mistakes? Can you think of any weather features that we could potentially add to make better predictions?
+
+It appears that the model make mistake the geographical regions are close. Vancouver tends to be confused with Seattle and Victoria and Toronto with Ottawa. That would make sense because the places that close together tends to have similiar weather. Either more accurate data or some location data can certain improve the results

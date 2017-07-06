@@ -1,0 +1,12 @@
+1. In the A/B test analysis, do you feel like we're p-hacking? How comfortable are you coming to a conclusion at p<0.05p<0.05?
+
+p-hacking means re-examining the pvalues and adjust the question so the data fits the results. While it is arguable that we look at the question for all users and just instructors, we are comparing all instructors to all users. We are not throwing away any results so I am confident with the conclusion.
+
+2. If we had done T-tests between each pair of sorting implementation results, how many tests would we run? If we looked for p<0.05p<0.05 in them, what would the probability be of having all conclusions correct, just by chance? That's the effective p-value of the many-T-tests analysis.
+
+We would have done (7 choose 2 ) tests for each pair of results. The probability of having them all correct is 2.78747635987e-67
+
+3. Give a ranking of the sorting implementations by speed, including which ones could not be distinguished. (i.e. which pairs could our experiment not conclude had different running times?)
+
+partition_sort, qs1, (qs4 or qs5), merge1, qs3, qs)
+(qs4 and qs5) are hard to distinguish, and (qs2 and qs3) are slightly different, seems like qs3 is slightly faster.
