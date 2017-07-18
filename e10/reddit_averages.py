@@ -37,18 +37,20 @@ def main():
     out_directory = sys.argv[2]
 
     comments = spark.read.json(in_directory, schema=schema)
+    # comments = comments.cache()
     # comments.show() ; return
     groupedSubreddit = comments.groupBy(comments['subreddit'])
     averages_by_subreddit = groupedSubreddit.agg(
         functions.avg(comments['score'])
         )
     # averages_by_subreddit.show() ; return
+    averages_by_subreddit = averages_by_subreddit.cache()
 
     averages_by_score = averages_by_subreddit.orderBy('avg(score)', ascending=False)
     # averages_by_score.show() ; return
-    
-    # averages_by_subreddit.write.csv(out_directory + '-subreddit', mode='overwrite')
-    #averages_by_score.write.csv(out_directory + '-score', mode='overwrite')
+
+    averages_by_subreddit.write.csv(out_directory + '-subreddit', mode='overwrite')
+    averages_by_score.write.csv(out_directory + '-score', mode='overwrite')
 
 
 if __name__=='__main__':
