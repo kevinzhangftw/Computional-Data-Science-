@@ -49,12 +49,16 @@ def main():
 	joined_data = enOnly.join(groups, 
 								on=(enOnly['request'] == groups['max(request)'])
 							 ).drop(groups['filename'])
+
 	joined_dataS = joined_data.sort(joined_data['filename'])
-	# joined_dataS.show() ; return 
 	# joined_data = groups.join(enOnly, 
-	# 							on=(enOnly['request'] == groups['max(request)'])
+	# 							on=(groups['max(request)'] == enOnly['request'])
 	# 						 ).drop(enOnly['filename'])
-	# joined_data.sort(joined_data['filename']).show() ; return 
+	# joined_dataS = joined_data.sort(joined_data['filename'])
+
+	# joined_dataS.show() ;return
+
+	joined_dataS = joined_dataS.cache()
 
 	highestCountPerHr = joined_dataS.select(
 		joined_dataS['filename'].alias('date'),
