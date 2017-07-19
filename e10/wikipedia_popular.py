@@ -28,11 +28,11 @@ def convertFilenames(df):
 def main():
 	in_directory = sys.argv[1]
 	out_directory = sys.argv[2]
-
 	pgcountsfilenames = spark.read.csv(in_directory, schema=schema, sep=' ').withColumn(
 										'filename', functions.input_file_name())
 	filenamesConverted = convertFilenames(pgcountsfilenames)
 	# filenamesConverted.show() ; return
+	
 	mainRemoved = filenamesConverted.filter(
 					functions.substring(filenamesConverted.title, 1, 9) != 'Main_Page')
 	spcRemoved = mainRemoved.filter(
@@ -40,38 +40,30 @@ def main():
 	enOnly = spcRemoved.filter(
 					functions.substring(spcRemoved.lang, 1, 2) == 'en')
 	# enOnly.show() ; return
+	
 	grouped = enOnly.groupBy(enOnly['filename'])
 	groups = grouped.agg(
 		functions.max(enOnly['request'])
 		)
 	# groups.sort(groups['filename']).show(); return
+	groups = groups.cache()
 
-	joined_data = enOnly.join(groups, 
-								on=(enOnly['request'] == groups['max(request)'])
-							 ).drop(groups['filename'])
-
+	cond = [(groups['max(request)'] == enOnly['request']), 
+			(groups['filename'] == enOnly['filename'])]
+	joined_data = groups.join(enOnly, cond).drop(enOnly['filename'])
 	joined_dataS = joined_data.sort(joined_data['filename'])
-	# joined_data = groups.join(enOnly, 
-	# 							on=(groups['max(request)'] == enOnly['request'])
-	# 						 ).drop(enOnly['filename'])
-	# joined_dataS = joined_data.sort(joined_data['filename'])
-
 	# joined_dataS.show() ;return
 
-	joined_dataS = joined_dataS.cache()
+	# joined_dataS = joined_dataS.cache()
 
 	highestCountPerHr = joined_dataS.select(
 		joined_dataS['filename'].alias('date'),
 		joined_dataS['title'],
 		joined_dataS['max(request)'],
 	)
-	highestCountPerHr.show() ; return
+	# highestCountPerHr.show() ; return
 
-	# sortedHighestCountPerHr = highestCountPerHr.sort(highestCountPerHr['date'])
-	# sortedHighestCountPerHr.show()
-
-	# averages_by_subreddit.write.csv(out_directory + '-subreddit', mode='overwrite')
-	# averages_by_score.write.csv(out_directory + '-score', mode='overwrite')
+	highestCountPerHr.write.csv(out_directory, mode='overwrite')
 
 
 if __name__=='__main__':
