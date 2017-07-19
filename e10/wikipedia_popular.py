@@ -21,6 +21,7 @@ def getTimeStr(path):
 
 def convertFilenames(df):
 	path_to_hour = functions.udf(getTimeStr, returnType=types.StringType())
+	# return df.withColumn('filename', path_to_hour('filename'))
 	return df.withColumn('filename', path_to_hour('filename'))
 
 
@@ -28,17 +29,43 @@ def main():
 	in_directory = sys.argv[1]
 	out_directory = sys.argv[2]
 
-	# pagecounts = spark.read.csv(in_directory, schema=schema, sep=' ')
-	# pagecounts.show() ; return
-
 	pgcountsfilenames = spark.read.csv(in_directory, schema=schema, sep=' ').withColumn(
 										'filename', functions.input_file_name())
 	filenamesConverted = convertFilenames(pgcountsfilenames)
-	filenamesConverted.show() ; return
-	# filenamesConverted.select('filename').show() ; return
+	# filenamesConverted.show() ; return
+	mainRemoved = filenamesConverted.filter(
+					functions.substring(filenamesConverted.title, 1, 9) != 'Main_Page')
+	spcRemoved = mainRemoved.filter(
+					functions.substring(mainRemoved.title, 1, 8) != 'Special:')
+	enOnly = spcRemoved.filter(
+					functions.substring(spcRemoved.lang, 1, 2) == 'en')
+	# enOnly.show() ; return
+	grouped = enOnly.groupBy(enOnly['filename'])
+	groups = grouped.agg(
+		functions.max(enOnly['request'])
+		)
+	# groups.sort(groups['filename']).show(); return
 
-	
-	
+	joined_data = enOnly.join(groups, 
+								on=(enOnly['request'] == groups['max(request)'])
+							 ).drop(groups['filename'])
+	joined_dataS = joined_data.sort(joined_data['filename'])
+	# joined_dataS.show() ; return 
+	# joined_data = groups.join(enOnly, 
+	# 							on=(enOnly['request'] == groups['max(request)'])
+	# 						 ).drop(enOnly['filename'])
+	# joined_data.sort(joined_data['filename']).show() ; return 
+
+	highestCountPerHr = joined_dataS.select(
+		joined_dataS['filename'].alias('date'),
+		joined_dataS['title'],
+		joined_dataS['max(request)'],
+	)
+	highestCountPerHr.show() ; return
+
+	# sortedHighestCountPerHr = highestCountPerHr.sort(highestCountPerHr['date'])
+	# sortedHighestCountPerHr.show()
+
 	# averages_by_subreddit.write.csv(out_directory + '-subreddit', mode='overwrite')
 	# averages_by_score.write.csv(out_directory + '-score', mode='overwrite')
 
