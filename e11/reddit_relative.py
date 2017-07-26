@@ -57,6 +57,10 @@ def main():
 
     checkPositive = functions.udf(isPositive, returnType=types.BooleanType())
     positiveAvgs = averages_by_subreddit.filter(checkPositive('avg(score)')== True)
+    
+    #broadcast the small table
+    positiveAvgs = functions.broadcast(positiveAvgs)
+    
     joinavgs = comments.join(positiveAvgs, on='subreddit')
     joinavgs = joinavgs.cache()
     # joinavgs.show() ; return
@@ -71,7 +75,10 @@ def main():
     # group_by_sub_maxRel.show() ; return
     cond = [(group_by_sub_maxRel['subreddit'] == relScoreComments['subreddit']), 
             (group_by_sub_maxRel['max(rel_score)'] == relScoreComments['rel_score'])]
-
+    
+    # broadcast smalle table 
+    group_by_sub_maxRel = functions.broadcast(group_by_sub_maxRel)
+    
     joinRelAuthor = group_by_sub_maxRel.join(relScoreComments, cond).drop(relScoreComments['subreddit'])
     joinRelAuthor = joinRelAuthor.cache()
     # joinRelAuthor.show() ; return
@@ -82,7 +89,7 @@ def main():
         joinRelAuthor['rel_score'],
     )
 
-    best_author.show()
+    # best_author.show();return
 
     best_author.write.json(out_directory, mode='overwrite')
 

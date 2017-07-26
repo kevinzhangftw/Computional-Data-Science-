@@ -1,0 +1,15 @@
+1. In your reddit_relative.py, what intermediate results did you .cache()? Briefly describe what would have happened if you hadn't used .cache() anywhere. (No need to time it, unless you really want to.)
+
+I cached the two results of the joined table after the two joine operations. If i did not use cache, the second time join, spark will have to redo all the work joining the first table again. 
+
+2. How did marking DataFrames for broadcast affect the running time of the “best author” program above?
+
+running time without broadcasting
+real  0m53.185s
+user  0m24.436s
+sys  0m1.296s
+
+running time with broadcasting
+real  0m53.734s
+user  0m20.344s
+sys  0m0.984s

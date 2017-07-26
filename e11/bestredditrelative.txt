@@ -1,0 +1,107 @@
+time spark-submit --conf spark.dynamicAllocation.enabled=false --num-executors=8 reddit_relative.py /courses/318/reddit-3 output
+
+real	0m53.185s
+user	0m24.436s
+sys	0m1.296s
+
+spark-submit --conf spark.dynamicAllocation.enabled=false --num-executors=8 reddit_relative.py /courses/318/reddit-3 output
+
+
+
++---------+------------------+
+|subreddit|        avg(score)|
++---------+------------------+
+|     xkcd| 5.272939881689366|
+|    scala| 1.928939237899073|
+|optometry|1.4701986754966887|
+|  Cameras|1.2222222222222223|
+|Genealogy| 1.871313672922252|
++---------+------------------+
+
++---------+-------------------+-----+-----------------+
+|subreddit|             author|score|       avg(score)|
++---------+-------------------+-----+-----------------+
+|     xkcd|           Tbone139|    1|5.272939881689366|
+|     xkcd|         BoonTobias|    4|5.272939881689366|
+|     xkcd|       mynameisdave|   -2|5.272939881689366|
+|     xkcd|             ani625|    5|5.272939881689366|
+|     xkcd|           Treberto|   -1|5.272939881689366|
+|     xkcd|            Norther|    1|5.272939881689366|
+|     xkcd|             dakk12|    2|5.272939881689366|
+|     xkcd|            jtp8736|    1|5.272939881689366|
+|     xkcd|RichardPeterJohnson|    7|5.272939881689366|
+|     xkcd|            wthulhu|    3|5.272939881689366|
+|    scala|          retronym_|    2|1.928939237899073|
+|    scala|              jdh30|    1|1.928939237899073|
+|     xkcd|           rsshilli|   25|5.272939881689366|
+|     xkcd|           rsshilli|    5|5.272939881689366|
+|     xkcd|            Shindig|    1|5.272939881689366|
+|     xkcd|          [deleted]|    1|5.272939881689366|
+|     xkcd|            Wilibus|    1|5.272939881689366|
+|     xkcd|             ilogik|    2|5.272939881689366|
+|     xkcd|     conservohippie|    3|5.272939881689366|
+|     xkcd|             csours|    4|5.272939881689366|
++---------+-------------------+-----+-----------------+
++---------+-------------------+-----+-----------------+-----------+
+|subreddit|             author|score|       avg(score)|  rel_score|
++---------+-------------------+-----+-----------------+-----------+
+|     xkcd|           Tbone139|    1|5.272939881689366| 0.18964753|
+|     xkcd|         BoonTobias|    4|5.272939881689366|  0.7585901|
+|     xkcd|       mynameisdave|   -2|5.272939881689366|-0.37929505|
+|     xkcd|             ani625|    5|5.272939881689366|  0.9482376|
+|     xkcd|           Treberto|   -1|5.272939881689366|-0.18964753|
+|     xkcd|            Norther|    1|5.272939881689366| 0.18964753|
+|     xkcd|             dakk12|    2|5.272939881689366| 0.37929505|
+|     xkcd|            jtp8736|    1|5.272939881689366| 0.18964753|
+|     xkcd|RichardPeterJohnson|    7|5.272939881689366|  1.3275326|
+|     xkcd|            wthulhu|    3|5.272939881689366| 0.56894255|
+|    scala|          retronym_|    2|1.928939237899073|  1.0368392|
+|    scala|              jdh30|    1|1.928939237899073|  0.5184196|
+|     xkcd|           rsshilli|   25|5.272939881689366|   4.741188|
+|     xkcd|           rsshilli|    5|5.272939881689366|  0.9482376|
+|     xkcd|            Shindig|    1|5.272939881689366| 0.18964753|
+|     xkcd|          [deleted]|    1|5.272939881689366| 0.18964753|
+|     xkcd|            Wilibus|    1|5.272939881689366| 0.18964753|
+|     xkcd|             ilogik|    2|5.272939881689366| 0.37929505|
+|     xkcd|     conservohippie|    3|5.272939881689366| 0.56894255|
+|     xkcd|             csours|    4|5.272939881689366|  0.7585901|
++---------+-------------------+-----+-----------------+-----------+
+
++---------+--------------+
+|subreddit|max(rel_score)|
++---------+--------------+
+|     xkcd|     63.152626|
+|    scala|      8.813134|
+|optometry|      4.081081|
+|  Cameras|     1.6363636|
+|Genealogy|     6.4126077|
++---------+--------------+
+
++---------+--------------+---------+-----------+-----+------------------+---------+
+|subreddit|max(rel_score)|subreddit|     author|score|        avg(score)|rel_score|
++---------+--------------+---------+-----------+-----+------------------+---------+
+|     xkcd|     63.152626|     xkcd|  shigawire|  333| 5.272939881689366|63.152626|
+|    scala|      8.813134|    scala|   TheSmoke|   17| 1.928939237899073| 8.813134|
+|optometry|      4.081081|optometry|Klinefelter|    6|1.4701986754966887| 4.081081|
+|  Cameras|     1.6363636|  Cameras|TogOfStills|    2|1.2222222222222223|1.6363636|
+|  Cameras|     1.6363636|  Cameras|  [deleted]|    2|1.2222222222222223|1.6363636|
+|Genealogy|     6.4126077|Genealogy|  ackbar420|   12| 1.871313672922252|6.4126077|
++---------+--------------+---------+-----------+-----+------------------+---------+
+
++--------------+---------+-----------+-----+------------------+---------+
+|max(rel_score)|subreddit|     author|score|        avg(score)|rel_score|
++--------------+---------+-----------+-----+------------------+---------+
+|     63.152626|     xkcd|  shigawire|  333| 5.272939881689366|63.152626|
+|      8.813134|    scala|   TheSmoke|   17| 1.928939237899073| 8.813134|
+|      4.081081|optometry|Klinefelter|    6|1.4701986754966887| 4.081081|
+|     1.6363636|  Cameras|TogOfStills|    2|1.2222222222222223|1.6363636|
+|     1.6363636|  Cameras|  [deleted]|    2|1.2222222222222223|1.6363636|
+|     6.4126077|Genealogy|  ackbar420|   12| 1.871313672922252|6.4126077|
++--------------+---------+-----------+-----+------------------+---------+
+
+{"subreddit":"xkcd","author":"shigawire","rel_score":63.152626}
+{"subreddit":"scala","author":"TheSmoke","rel_score":8.813134}
+{"subreddit":"optometry","author":"Klinefelter","rel_score":4.081081}
+{"subreddit":"Cameras","author":"TogOfStills","rel_score":1.6363636}
+{"subreddit":"Cameras","author":"[deleted]","rel_score":1.6363636}
+{"subreddit":"Genealogy","author":"ackbar420","rel_score":6.4126077}
