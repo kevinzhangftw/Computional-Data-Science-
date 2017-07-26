@@ -28,7 +28,8 @@ def convertFilenames(df):
 def main():
 	in_directory = sys.argv[1]
 	out_directory = sys.argv[2]
-	pgcountsfilenames = spark.read.csv(in_directory, schema=schema, sep=' ').withColumn(
+	pgcountsfilenames = spark.read.csv(in_directory, schema=schema, sep=' ')
+							.withColumn(
 										'filename', functions.input_file_name())
 	filenamesConverted = convertFilenames(pgcountsfilenames)
 	# filenamesConverted.show() ; return
