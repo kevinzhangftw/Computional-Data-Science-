@@ -56,7 +56,8 @@ def main():
     # averages_by_subreddit.show() ; return
 
     checkPositive = functions.udf(isPositive, returnType=types.BooleanType())
-    positiveAvgs = averages_by_subreddit.filter(checkPositive('avg(score)')== True)
+    # positiveAvgs = averages_by_subreddit.filter(checkPositive('avg(score)')== True)
+    positiveAvgs = averages_by_subreddit.filter(averages_by_subreddit['avg(score)']>0)
     
     #broadcast the small table
     positiveAvgs = functions.broadcast(positiveAvgs)

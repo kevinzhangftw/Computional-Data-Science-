@@ -10,6 +10,6 @@ user  0m24.436s
 sys  0m1.296s
 
 running time with broadcasting
-real  0m53.734s
-user  0m20.344s
-sys  0m0.984s
+real  0m37.812s
+user  0m20.020s
+sys  0m0.920s
