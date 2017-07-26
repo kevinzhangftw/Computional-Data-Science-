@@ -1,9 +1,12 @@
 time spark-submit --conf spark.dynamicAllocation.enabled=false --num-executors=8 reddit_relative.py /courses/318/reddit-3 output
 
-real	0m53.185s
-user	0m24.436s
-sys	0m1.296s
+real	0m47.229s
+user	0m24.044s
+sys	0m1.216s
 
+real	0m37.812s
+user	0m20.020s
+sys	0m0.920s
 spark-submit --conf spark.dynamicAllocation.enabled=false --num-executors=8 reddit_relative.py /courses/318/reddit-3 output
 
 

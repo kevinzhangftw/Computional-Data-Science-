@@ -1,6 +1,8 @@
 import sys
 from pyspark.sql import SparkSession, functions, types, Row
+from pyspark.sql.functions import lit
 import re
+import math
 
 spark = SparkSession.builder.appName('correlate logs').getOrCreate()
 
@@ -35,7 +37,22 @@ def create_row_rdd(in_directory):
     # TODO: return an RDD of Row() objects
     return log_lines.map(line_to_row).filter(not_none)
 
+def calcCoef(ones, x, x2, y, y2, xy):
+    nxy = ones * xy
+    sumXsumY = x * y
+    nxysumXsumY = nxy - sumXsumY
 
+    nx2 = ones * x2
+    xExp = x ** 2
+    sqnx2xExp = math.sqrt(nx2 - xExp)
+
+    ny2 = ones * y2
+    yExp = y ** 2
+    sqny2yExp = math.sqrt(ny2 - yExp)
+
+    r = nxysumXsumY / (sqnx2xExp * sqny2yExp)
+
+    return r
 
 def main():
     in_directory = sys.argv[1]
@@ -44,12 +61,42 @@ def main():
     # print('ROW LINES START HERE-----------------------------------', somerows.take(5))
     # print('ROW LINES END HERE-------------------------------------') ; return
     logs = spark.createDataFrame(create_row_rdd(in_directory))
-
-    logs.show() ; return
+    # logs.show() ; return
+    hostGroup = logs.groupBy(logs['_1'])
+    hostData = hostGroup.agg(
+                functions.count(logs['_1']).alias('x'),
+                functions.sum(logs['_2']).alias('y')
+            )
+    hostData = hostData.withColumn("ones", lit(1))
+    hostData = hostData.withColumn("x^2", hostData['x']**2)
+    hostData = hostData.withColumn("y^2", hostData['y']**2)
+    hostData = hostData.withColumn("x*y", hostData['x']*hostData['y'])
+    hostData = hostData.select(
+        hostData['ones'],
+        hostData['x'],
+        hostData['x^2'],
+        hostData['y'],
+        hostData['y^2'],
+        hostData['x*y'],
+    )
+    # hostData.show() ; return
+    hostDataGroup = hostData.groupBy()
+    # hostDataGroup.sum().show() ; return
+    
+    # DEBUG
+    # print('HOST LINES START HERE-----------------------------------', hostDataGroup.sum().first())
+    # print('HOST LINES END HERE-------------------------------------') ; return
 
     # TODO: calculate r.
+    ones= hostDataGroup.sum().first()[0]
+    x   = hostDataGroup.sum().first()[1]
+    x2  = hostDataGroup.sum().first()[2]
+    y   = hostDataGroup.sum().first()[3]
+    y2  = hostDataGroup.sum().first()[4]
+    xy  = hostDataGroup.sum().first()[5]
 
-    r = 0 # TODO: it isn't zero.
+
+    r = calcCoef(ones, x, x2, y, y2, xy)
     print("r = %g\nr^2 = %g" % (r, r**2))
 
 
