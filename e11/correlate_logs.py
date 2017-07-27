@@ -56,44 +56,38 @@ def calcCoef(ones, x, x2, y, y2, xy):
 
 def main():
     in_directory = sys.argv[1]
-    # DEBUG
-    # somerows = create_row_rdd(in_directory)
-    # print('ROW LINES START HERE-----------------------------------', somerows.take(5))
-    # print('ROW LINES END HERE-------------------------------------') ; return
     logs = spark.createDataFrame(create_row_rdd(in_directory))
     # logs.show() ; return
+    # _1 is hostname
     hostGroup = logs.groupBy(logs['_1'])
     hostData = hostGroup.agg(
                 functions.count(logs['_1']).alias('x'),
                 functions.sum(logs['_2']).alias('y')
             )
-    hostData = hostData.withColumn("ones", lit(1))
+    # hostData = hostData.withColumn("ones", lit(1))
     hostData = hostData.withColumn("x^2", hostData['x']**2)
     hostData = hostData.withColumn("y^2", hostData['y']**2)
     hostData = hostData.withColumn("x*y", hostData['x']*hostData['y'])
-    hostData = hostData.select(
-        hostData['ones'],
-        hostData['x'],
-        hostData['x^2'],
-        hostData['y'],
-        hostData['y^2'],
-        hostData['x*y'],
-    )
+    # reordering the columns
+    # hostData = hostData.select(
+    #     # hostData['ones'],
+    #     hostData['x'],
+    #     hostData['x^2'],
+    #     hostData['y'],
+    #     hostData['y^2'],
+    #     hostData['x*y'],
+    # )
     # hostData.show() ; return
+    
     hostDataGroup = hostData.groupBy()
     # hostDataGroup.sum().show() ; return
-    
-    # DEBUG
-    # print('HOST LINES START HERE-----------------------------------', hostDataGroup.sum().first())
-    # print('HOST LINES END HERE-------------------------------------') ; return
-
-    # TODO: calculate r.
-    ones= hostDataGroup.sum().first()[0]
-    x   = hostDataGroup.sum().first()[1]
+    ones= hostData.count()
+    # ones= hostDataGroup.sum().first()[0]
+    x   = hostDataGroup.sum().first()[0]
     x2  = hostDataGroup.sum().first()[2]
-    y   = hostDataGroup.sum().first()[3]
-    y2  = hostDataGroup.sum().first()[4]
-    xy  = hostDataGroup.sum().first()[5]
+    y   = hostDataGroup.sum().first()[1]
+    y2  = hostDataGroup.sum().first()[3]
+    xy  = hostDataGroup.sum().first()[4]
 
 
     r = calcCoef(ones, x, x2, y, y2, xy)
