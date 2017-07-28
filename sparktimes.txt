@@ -1,0 +1,77 @@
+time spark-submit --master="local[1]" reddit_averages.py reddit-0 output
+
+time spark-submit --master=local[1] reddit_averages.py reddit-0 output
+
+spark-submit first_spark.py /courses/318/xyz-3 output
+
+time spark-submit --master=local[1] reddit_averages.py /courses/318/reddit-2 output
+real	0m26.696s
+user	0m35.152s
+sys	0m2.396s
+
+(my test)no input caching
+real	0m25.234s
+user	0m33.448s
+sys	0m2.192s
+
+no caching yes schema
+real	0m31.383s
+user	0m40.192s
+sys	0m2.356s
+
+no caching no schema
+real	0m37.372s
+user	0m45.484s
+sys	0m2.328s
+
+straight read data no average call
+real	0m8.953s
+user	0m11.940s
+sys	0m1.280s
+
+
+spark-submit --master="local[1]" reddit_averages.py reddit-0 output  21.59s user 1.29s system 137% cpu 16.658 total
+
+spark-submit --master=local[1] reddit_averages.py reddit-0 output  22.27s user 1.19s system 142% cpu 16.483 total
+
+time spark-submit reddit_averages.py reddit-0 output
+spark-submit reddit_averages.py reddit-0 output  21.04s user 1.20s system 135% cpu 16.434 total
+
+time spark-submit reddit_averages.py reddit-1 output
+spark-submit reddit_averages.py reddit-1 output  31.98s user 1.69s system 171% cpu 19.660 total
++---------+------------------+
+|subreddit|        avg(score)|
++---------+------------------+
+|     xkcd| 5.272939881689366|
+|    scala| 1.928939237899073|
+|optometry|1.4701986754966887|
+|  Cameras|1.2222222222222223|
+|Genealogy| 1.871313672922252|
++---------+------------------+
+
+spark-submit reddit_averages.py reddit-0 output  29.97s user 1.73s system 161% cpu 19.674 total
++----------+----------+
+|helloworld|       1.5|
++----------+----------+
+
+
+averages_by_score = averages_by_subreddit.sort(averages_by_subreddit['avg(score)']).desc()
+    
++---------+------------------+
+|subreddit|        avg(score)|
++---------+------------------+
+|     xkcd| 5.272939881689366|
+|    scala| 1.928939237899073|
+|Genealogy| 1.871313672922252|
+|optometry|1.4701986754966887|
+|  Cameras|1.2222222222222223|
++---------+------------------+
+spark-submit reddit_averages.py reddit-1 output  34.03s user 1.87s system 172% cpu 20.840 total
+
+output directories
+spark-submit reddit_averages.py reddit-1 output  51.86s user 4.63s system 157% cpu 35.806 total
+
+cached once 
+spark-submit reddit_averages.py reddit-0 output  50.36s user 4.19s system 183% cpu 29.706 total
+twice
+spark-submit reddit_averages.py reddit-0 output  46.17s user 3.77s system 192% cpu 25.933 total

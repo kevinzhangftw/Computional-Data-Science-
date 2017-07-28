@@ -46,9 +46,9 @@ def calcCoef(ones, x, x2, y, y2, xy):
     xExp = x ** 2
     sqnx2xExp = math.sqrt(nx2 - xExp)
 
-    ny2 = ones * y2
-    yExp = y ** 2
-    sqny2yExp = math.sqrt(ny2 - yExp)
+        ny2 = ones * y2
+        yExp = y ** 2
+        sqny2yExp = math.sqrt(ny2 - yExp)
 
     r = nxysumXsumY / (sqnx2xExp * sqny2yExp)
 
